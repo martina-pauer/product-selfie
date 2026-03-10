@@ -24,18 +24,29 @@ class DatagramGenerator:
     self.categories.append(name)
 
   def count_from_folders(self, category: str) -> int:
-   '''
+    '''
       How much images has the folder of that category.
     '''
-   images: int = 0
-   # Make temp file for get the text to show files
-   import os
-   # Use folder only for selfie images
-   os.system(f'ls {self.get_path(category)} >> file_count_temp.txt')
-   # Get output from file, count dots and storage result on image
-   # Free out Memory because don't need module
-   # Show image count
-   return images
+    images: int = 0
+    # Make temp file for get the text to show files
+    import os
+    # Use folder only for selfie images
+    os.system(f'ls {self.get_path(category)} >> file_count_temp.txt')
+    # Get output from file, count dots and storage result on image
+    file_list = open('file_count_temp.txt', 'r')
+    for image in file_list.readlines():
+        # Iterates over each line from all and count names with extension with dots
+        if image.__contains__('.'):
+        # The name is file
+          images += 1
+    # Close file and Free Out memory      
+    file_list.close()    
+    del file_list
+    # Free out Memory because don't need module
+    os.system('rm file_count_temp.txt')
+    del os
+    # Show image count
+    return images
 
   def write_file(self, name: str):
     '''
