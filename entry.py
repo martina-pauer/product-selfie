@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 # Gtk App for Data Entry Human Worker
-import lib.DatagramGenerator as report
+from lib.clasifier import DatagramGenerator as report
 
 class ImageRanker:
   def __init__(self):
@@ -32,8 +32,36 @@ class ImageRanker:
     import gi
     gi.require_version('Gtk', '3.0')
     from gi.repository import Gtk
+    # Make Gtk Window
+    class app(Gtk.Window):
+      def __init__(self):
+        # Init config
+        super().__init__(title = 'Image Categorizer')
+        self.set_size_request(screen_width, screen_height)
+        # Containers
+        self.data_container = Gtk.VBox()
+        # Image View
+        # Category Selection Menu
+        # Sender View
+        # Report View
+        # Connect events
+        # Add widgets to containers
+        # Add containers to window
+    # Show all
+    maker = app(480, 480)
 
-  def update_poll_visualizer(self, categories: list[str]);
+    maker.connect('delete-event', Gtk.main_quit)
+    
+    try:
+      maker.show_all()
+      Gtk.main()
+    except:
+      maker.close()  
+      del maker, app, Gtk
+    # Free out RAM
+    del gi, gi.repository
+
+  def update_poll_visualizer(self, categories: list[str]):
     '''
       Update stats visualization and make more current HTML output
       for keep up to date the information very fast.
