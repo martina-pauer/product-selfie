@@ -28,9 +28,13 @@ class DatagramGenerator:
       How much images has the folder of that category.
     '''
    images: int = 0
-   
-   self.get_path(category)
-   
+   # Make temp file for get the text to show files
+   import os
+   # Use folder only for selfie images
+   os.system(f'ls {self.get_path(category)} >> file_count_temp.txt')
+   # Get output from file, count dots and storage result on image
+   # Free out Memory because don't need module
+   # Show image count
    return images
 
   def write_file(self, name: str):
