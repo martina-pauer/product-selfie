@@ -23,7 +23,7 @@ def add_category(self, name: str, folder_path: str):
   self.folder_paths[name] = folder_path
   self.categories.append(category)
 
-def count_from_images(self, category: str) -> int:
+def count_from_folders(self, category: str) -> int:
   '''
     How much images has the folder of that category.
   '''
@@ -69,7 +69,7 @@ def write_file(self, name: str):
   output.close()
   del output
 
-def get_path(category: str) -> str:
+def get_path(self, category: str) -> str:
   return self.folder_paths[category]
 
 class  ImageClasify:
@@ -78,4 +78,37 @@ class  ImageClasify:
       Data about where is the image,
       the category and file type (PNG, SVG, GIF, ICO, etc)
     '''  
+    self.name: str = ''
+    
+    self.folder_path: str = './'
+
+    self.category: str = 'Selfie'
+
+    self.image_type: str = 'jpg'
+
+  def set_name(self, name: str, folder_path: str):
+    '''
+      Name for the image and path to folder that
+      contains the image for make absolute path.
+    '''
     pass
+
+  def set_category(self, category: str):
+      '''
+        Define a category where better fits the
+        image.
+      '''
+      pass
+
+  def get_folder() -> str:
+      '''
+        Path to the folder with the image
+        is initially.
+      '''
+      pass
+
+  def get_category() -> str:
+      '''
+        Category for clasiy the image.
+      '''       
+      pass
