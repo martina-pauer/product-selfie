@@ -21,7 +21,7 @@ class DatagramGenerator:
       folder to move the images
     '''  
     self.folder_paths[name] = folder_path
-    self.categories.append(category)
+    self.categories.append(name)
 
   def count_from_folders(self, category: str) -> int:
    '''
@@ -91,24 +91,24 @@ class  ImageClasify:
       Name for the image and path to folder that
       contains the image for make absolute path.
     '''
-    pass
+    self.name = name
 
   def set_category(self, category: str):
       '''
         Define a category where better fits the
         image.
       '''
-      pass
+      self.category = category
 
-  def get_folder() -> str:
+  def get_folder(self) -> str:
       '''
         Path to the folder with the image
         is initially.
       '''
-      pass
+      return self.folder_path
 
-  def get_category() -> str:
+  def get_category(self) -> str:
       '''
         Category for clasiy the image.
       '''       
-      pass
+      return self.category
