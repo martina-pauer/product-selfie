@@ -39,14 +39,33 @@ class ImageRanker:
         super().__init__(title = 'Image Categorizer')
         self.set_size_request(screen_width, screen_height)
         # Containers
-        self.data_container = Gtk.VBox()
+        self.big_container = Gtk.VBox()
+        self.image_container = Gtk.VBox()
+        self.form_container = Gtk.VBox()
+        self.results_comtainer = Gtk.VBox()
         # Image View
+        self.image = Gtk.Image()
         # Category Selection Menu
-        # Sender View
+        self.categories_menu = Gtk.ComboBoxText()
+        self.categories_menu.set_entry_text_column(0)
+        
+        for category in ['Category 1', 'Category 2', 'Category 3']:
+          self.categories_menu.append_text(category)
+        # Sender Button
+        self.sender = Gtk.Button(label = 'Categorize')
         # Report View
+        self.results = Gtk.Label()
         # Connect events
         # Add widgets to containers
+        self.form_container.pack_start(self.categories_menu, True, True, 0)        
+        self.form_container.pack_start(self.sender, True, True, 0)
+        self.image_container.add(self.image)        
+        self.results_container.add(self.results)        
         # Add containers to window
+        for container in [self.image_container, self.form_container, self.results_container]:
+            self.big_container.pack_start(container, True, True, 0)
+            
+        self.add(self.big_container)    
     # Show all
     maker = app(480, 480)
 
