@@ -7,9 +7,33 @@ class ImageRanker:
     '''
       Gtk Graphical User Interface
     '''
-    self.image_paths: list[str] = []
-    # Key: Image Path, Value: Category Path
+    self.image_paths: list[str] = ['.']
+    # Key: Category, Value: Category Path
     self.category_paths: dict[str, str] = {}
+    # Get categories from data/conf.csv one time for optimize
+    config = open('data/conf.csv', 'r')
+    # Add each category to categories register
+    for line in config:
+      if not line.__contains__('Category'):
+        part: list[str] = line.split(', ')
+        self.category_paths[part[0]] = part[1]
+        del part
+        # Make folder if not exist
+        try:
+          import os
+          os.system(f'mkdir -p {part[1]}')
+        except:
+          pass
+
+        del os
+    # Close file to Free Out memmory and could use it in the future    
+    config.close()
+    del config
+    # Add categories to the report object      
+    for category_path in list(self.category_paths.values()):
+        # Get the category paths for get categories
+        separate: list[str] = category_path.split('/')
+        report.add_category(separate[separate.__len__() - 1], category_path)    
 
   def move_files(self):
     '''
@@ -42,20 +66,21 @@ class ImageRanker:
         self.big_container = Gtk.VBox()
         self.image_container = Gtk.VBox()
         self.form_container = Gtk.VBox()
-        self.results_comtainer = Gtk.VBox()
+        self.results_container = Gtk.VBox()
         # Image View
         self.image = Gtk.Image()
         # Category Selection Menu
         self.categories_menu = Gtk.ComboBoxText()
         self.categories_menu.set_entry_text_column(0)
         
-        for category in ['Category 1', 'Category 2', 'Category 3']:
+        for category in ImageRanker().category_paths.keys():
           self.categories_menu.append_text(category)
         # Sender Button
         self.sender = Gtk.Button(label = 'Categorize')
         # Report View
         self.results = Gtk.Label()
         # Connect events
+        self.sender.connect('clicked', self.upd)
         # Add widgets to containers
         self.form_container.pack_start(self.categories_menu, True, True, 0)        
         self.form_container.pack_start(self.sender, True, True, 0)
@@ -67,7 +92,7 @@ class ImageRanker:
             
         self.add(self.big_container)    
     # Show all
-    maker = app(480, 480)
+    maker = app(screen_width, screen_height)
 
     maker.connect('delete-event', Gtk.main_quit)
     
@@ -80,9 +105,20 @@ class ImageRanker:
     # Free out RAM
     del gi, gi.repository
 
-  def update_poll_visualizer(self, categories: list[str]):
+  def update_poll_visualizer(self, widget: Gtk.Button):
     '''
       Update stats visualization and make more current HTML output
       for keep up to date the information very fast.
     '''
-    pass
+    result: str = ''
+    # Add each one of the categories and how much images has each one
+    for category in self.category_paths.keys():
+      result += f'Category: {category},\tImages: {report.count_from_folders(category)}'
+    # Show the result  
+    self.show_graphical_interface(480, 480)
+    # Make the report  
+    report.write_file('data/report.html')
+    
+# Run the program
+program = ImageRanker()
+program.show_graphical_interface(480, 480) 
