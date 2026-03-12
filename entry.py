@@ -1,13 +1,19 @@
 #!/usr/bin/python3
 # Gtk App for Data Entry Human Worker
 from lib.clasifier import DatagramGenerator as report
+# Initialize object for could use it with all his atributes
+report = report()
+# Use global modules for the graphicals works
+import gi
+gi.require_version('Gtk', '3.0')
+from gi.repository import Gtk
 
 class ImageRanker:
   def __init__(self):
     '''
       Gtk Graphical User Interface
     '''
-    self.image_paths: list[str] = ['.']
+    self.image_paths: list[str] = ['./']
     # Key: Category, Value: Category Path
     self.category_paths: dict[str, str] = {}
     # Get categories from data/conf.csv one time for optimize
@@ -16,7 +22,7 @@ class ImageRanker:
     for line in config:
       if not line.__contains__('Category'):
         part: list[str] = line.split(', ')
-        self.category_paths[part[0]] = part[1]
+        self.category_paths.__setitem__(part[0], part[1])
         del part
         # Make folder if not exist
         try:
@@ -43,7 +49,7 @@ class ImageRanker:
     import os
     # Get images folder path and where move
     for image in self.image_paths:
-      os.system(f'mv {image} {self.category_path[image]}')
+      os.system(f'mv {image} {self.category_paths[image]}')
     # Free Out memory
     del os
     # When the file was moved restart all
@@ -52,10 +58,7 @@ class ImageRanker:
   def show_graphical_interface(self, screen_width: int, screen_height: int):
     '''
       Render Gtk app on the screen.
-    '''  
-    import gi
-    gi.require_version('Gtk', '3.0')
-    from gi.repository import Gtk
+    '''
     # Make Gtk Window
     class app(Gtk.Window):
       def __init__(self):
@@ -80,7 +83,7 @@ class ImageRanker:
         # Report View
         self.results = Gtk.Label()
         # Connect events
-        self.sender.connect('clicked', self.upd)
+        self.sender.connect('clicked', ImageRanker().update_poll_visualizer)
         # Add widgets to containers
         self.form_container.pack_start(self.categories_menu, True, True, 0)        
         self.form_container.pack_start(self.sender, True, True, 0)
@@ -92,7 +95,7 @@ class ImageRanker:
             
         self.add(self.big_container)    
     # Show all
-    maker = app(screen_width, screen_height)
+    maker = app()
 
     maker.connect('delete-event', Gtk.main_quit)
     
@@ -101,9 +104,6 @@ class ImageRanker:
       Gtk.main()
     except:
       maker.close()  
-      del maker, app, Gtk
-    # Free out RAM
-    del gi, gi.repository
 
   def update_poll_visualizer(self, widget: Gtk.Button):
     '''
