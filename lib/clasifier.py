@@ -20,7 +20,7 @@ class DatagramGenerator:
       Load a new category and his respective
       folder to move the images
     '''  
-    self.folder_paths[name] = folder_path
+    self.folders_paths.__setitem__(name, folder_path)
     self.categories.append(name)
 
   def count_from_folders(self, category: str) -> int:
@@ -36,7 +36,7 @@ class DatagramGenerator:
     file_list = open('file_count_temp.txt', 'r')
     for image in file_list.readlines():
         # Iterates over each line from all and count names with extension with dots
-        if image.__contains__('.'):
+        if image.__contains__(f'.{ImageClasify().image_type}'):
         # The name is file
           images += 1
     # Close file and Free Out memory      
@@ -70,7 +70,7 @@ class DatagramGenerator:
     content += '</head>\n\t'
     # Visible Part
     content += '<body>\n\t\t'
-    for category in self.poll.keys:
+    for category in self.poll.keys():
       # Count the images in each category
       content += '<div style = "text-align: center; padding: 0.5em; border: 2px solid black; border-radius: 0.5em; background: #2535cf; color: #efefef; font-weight: 840;">\n\t\t\t'
       content += f'{category}<span style = "text-align: center; margin: 0.5 padding: 0.5em; border: 2px solid black; background: #efefef; color: black; font-weight: 840;">{self.poll[category]}</span\n'
@@ -85,7 +85,7 @@ class DatagramGenerator:
     del output
 
   def get_path(self, category: str) -> str:
-    return self.folder_paths[category]
+    return self.folders_paths[category]
 
 class  ImageClasify:
   def __init__(self):
