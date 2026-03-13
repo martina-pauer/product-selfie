@@ -37,9 +37,9 @@ class ImageRanker:
     del config
     # Add categories to the report object      
     for category_path in list(self.category_paths.values()):
-        # Get the category paths for get categories
-        separate: list[str] = category_path.split('/')
-        report.add_category(separate[separate.__len__() - 1], category_path)    
+      # Get the category paths for get categories
+      separate: list[str] = category_path.split('/')
+      report.add_category(separate[separate.__len__() - 1], category_path)    
 
   def move_files(self):
     '''
