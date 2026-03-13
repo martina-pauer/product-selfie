@@ -21,7 +21,8 @@ class ImageRanker:
     # Add each category to categories register
     for line in config:
       if not line.__contains__('Category'):
-        part: list[str] = line.split(', ')
+        # Load without newlines for get the path and names right
+        part: list[str] = line.replace('\n', '').split(', ')
         self.category_paths.__setitem__(part[0], part[1])
         del part
         # Make folder if not exist
@@ -49,7 +50,11 @@ class ImageRanker:
     import os
     # Get images folder path and where move
     for image in self.image_paths:
-      os.system(f'mv {image} {self.category_paths[image]}')
+      # Add exception handle for don't give systems errors
+      try:
+        os.system(f'mv {image} {self.category_paths[image]}')
+      except:
+        pass  
     # Free Out memory
     del os
     # When the file was moved restart all
@@ -114,6 +119,8 @@ class ImageRanker:
     # Add each one of the categories and how much images has each one
     for category in self.category_paths.keys():
       result += f'Category: {category},\tImages: {report.count_from_folders(category)}'
+    # Close Old Window
+    self.close()  
     # Show the result  
     self.show_graphical_interface(480, 480)
     # Make the report  

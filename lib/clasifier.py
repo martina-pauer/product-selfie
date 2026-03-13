@@ -31,19 +31,33 @@ class DatagramGenerator:
     # Make temp file for get the text to show files
     import os
     # Use folder only for selfie images
-    os.system(f'ls {self.get_path(category)} >> file_count_temp.txt')
-    # Get output from file, count dots and storage result on image
-    file_list = open('file_count_temp.txt', 'r')
-    for image in file_list.readlines():
-        # Iterates over each line from all and count names with extension with dots
-        if image.__contains__(f'.{ImageClasify().image_type}'):
-        # The name is file
-          images += 1
-    # Close file and Free Out memory      
-    file_list.close()    
-    del file_list
-    # Free out Memory because don't need module
-    os.system('rm file_count_temp.txt')
+    try:
+      # Use exception handle if not found the files or folders
+      os.system(f'ls {self.get_path(category)} >> file_count_temp.txt')
+      # Get output from file, count dots and storage result on image
+      file_list = open('file_count_temp.txt', 'r')
+      for image in file_list.readlines():
+          # Iterates over each line from all and count names with extension with dots
+          if image.__contains__(f'.{ImageClasify().image_type}'):
+          # The name is file
+            images += 1
+      # Close file and Free Out memory      
+      file_list.close()    
+      del file_list
+      # Free out Memory because don't need module
+      os.system('rm file_count_temp.txt')
+    except:
+      # Create folder and try once again
+      try:
+        os.system(f'mkdir -p {self.get_path(category)}')  
+        os.system(f'ls {self.get_path(category)} >> file_count_temp.txt')
+        with open('file_count_temp.txt', 'r') as counting:
+            if image.__contains__(f'.{ImageClasify().image_type}'):
+              # Count when files are images
+              image += 1
+        os.system('rm file_count_temp.txt')      
+      except:
+        pass  
     del os
     # Show image count
     return images
@@ -52,12 +66,12 @@ class DatagramGenerator:
       '''
         Write the HTML output
       '''
-      prefix: str = './'
+      prefix: str = '.'
       # Prepare and proceed
       try:
         # Delete if exist old files
         import os
-        os.system(f'rm {prefix}/{name}.html')
+        os.system(f'rm {prefix}/{name}')
         del prefix
       except:
         pass
@@ -98,7 +112,7 @@ class  ImageClasify:
     
     self.folder_path: str = './'
 
-    self.category: str = 'Selfie'
+    self.category: str = 'First'
 
     self.image_type: str = 'jpg'
 
