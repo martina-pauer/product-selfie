@@ -7,13 +7,53 @@ report = report()
 import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
+# Make Gtk Window
+class app(Gtk.Window):
+    def __init__(self):
+      # Init config
+      super().__init__(title = 'Image Categorizer')
+      self.set_size_request(480, 480)
+      # Containers
+      self.big_container = Gtk.VBox()
+      self.image_container = Gtk.VBox()
+      self.form_container = Gtk.VBox()
+      self.results_container = Gtk.VBox()
+      # Image View
+      self.image = Gtk.Image()
+      # Category Selection Menu
+      self.categories_menu = Gtk.ComboBoxText()
+      self.categories_menu.set_entry_text_column(0)
+        
+      for category in ImageRanker().category_paths.keys():
+        self.categories_menu.append_text(category)
+      # Sender Button
+      self.sender = Gtk.Button(label = 'Categorize')
+      # Report View
+      self.results = Gtk.Label()
+      # Connect events
+      self.sender.connect('clicked', ImageRanker().update_poll_visualizer)
+      # Add widgets to containers
+      self.form_container.pack_start(self.categories_menu, True, True, 0)        
+      self.form_container.pack_start(self.sender, True, True, 0)
+      self.image_container.add(self.image)        
+      self.results_container.add(self.results)        
+      # Add containers to window
+      for container in [self.image_container, self.form_container, self.results_container]:
+        self.big_container.pack_start(container, True, True, 0)
+            
+      self.add(self.big_container)    
+# Show all
+maker = app()
+
+maker.connect('delete-event', Gtk.main_quit)
 
 class ImageRanker:
   def __init__(self):
     '''
       Gtk Graphical User Interface
     '''
-    self.image_paths: list[str] = ['./']
+    self.image_paths: list[str] = ['./First.jpg', './Second.jpg', 'Third.jpg']
+    self.image_index: int = 0
     # Key: Category, Value: Category Path
     self.category_paths: dict[str, str] = {}
     # Get categories from data/conf.csv one time for optimize
@@ -60,51 +100,12 @@ class ImageRanker:
     # When the file was moved restart all
     self.__init__()
 
-  def show_graphical_interface(self, screen_width: int, screen_height: int):
+  def show_graphical_interface(self):
     '''
       Render Gtk app on the screen.
-    '''
-    # Make Gtk Window
-    class app(Gtk.Window):
-      def __init__(self):
-        # Init config
-        super().__init__(title = 'Image Categorizer')
-        self.set_size_request(screen_width, screen_height)
-        # Containers
-        self.big_container = Gtk.VBox()
-        self.image_container = Gtk.VBox()
-        self.form_container = Gtk.VBox()
-        self.results_container = Gtk.VBox()
-        # Image View
-        self.image = Gtk.Image()
-        # Category Selection Menu
-        self.categories_menu = Gtk.ComboBoxText()
-        self.categories_menu.set_entry_text_column(0)
-        
-        for category in ImageRanker().category_paths.keys():
-          self.categories_menu.append_text(category)
-        # Sender Button
-        self.sender = Gtk.Button(label = 'Categorize')
-        # Report View
-        self.results = Gtk.Label()
-        # Connect events
-        self.sender.connect('clicked', ImageRanker().update_poll_visualizer)
-        # Add widgets to containers
-        self.form_container.pack_start(self.categories_menu, True, True, 0)        
-        self.form_container.pack_start(self.sender, True, True, 0)
-        self.image_container.add(self.image)        
-        self.results_container.add(self.results)        
-        # Add containers to window
-        for container in [self.image_container, self.form_container, self.results_container]:
-            self.big_container.pack_start(container, True, True, 0)
-            
-        self.add(self.big_container)    
-    # Show all
-    maker = app()
-
-    maker.connect('delete-event', Gtk.main_quit)
-    
+    '''    
     try:
+      maker.image.set_from_file(self.image_index)
       maker.show_all()
       Gtk.main()
     except:
@@ -118,14 +119,26 @@ class ImageRanker:
     result: str = ''
     # Add each one of the categories and how much images has each one
     for category in self.category_paths.keys():
-      result += f'Category: {category},\tImages: {report.count_from_folders(category)}'
+      result += f'\n\nCategory: {category},\tImages: {report.count_from_folders(category)}'
     # Close Old Window
     self.close()  
     # Show the result  
-    self.show_graphical_interface(480, 480)
+    self.refresh_interface(result)
     # Make the report  
     report.write_file('data/report.html')
     
+  def  refresh_interface(self, last_results: str):
+    '''
+      Auxiliar internal method for load
+      next image and show last results
+    '''
+    if self.image_index >= self.image_paths.__len__():
+      # When has the image max restar image index
+      self.image_index = 0
+    else:
+      self.image_index += 1    
+    maker.image.set_from_file(self.image_paths[self.image_index])
+    maker.results.set_text(last_results)
 # Run the program
 program = ImageRanker()
-program.show_graphical_interface(480, 480) 
+program.show_graphical_interface() 
