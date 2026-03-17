@@ -6,7 +6,7 @@ report = report()
 # Use global modules for the graphicals works
 import gi
 gi.require_version('Gtk', '3.0')
-from gi.repository import Gtk
+from gi.repository import Gtk, GdkPixbuf
 # Make ImageRanker class before window class
 class ImageRanker:
   def __init__(self):
@@ -95,10 +95,12 @@ class ImageRanker:
       # When has the image max restar image index
       self.image_index = 0
     else:
-      self.image_index += 1    
-    maker.image.set_from_file(self.image_paths[self.image_index])
+      self.image_index += 1  
+    # Create Scaled Image From The Original  
+    scaled_preview = GdkPixbuf.Pixbuf.new_from_file(self.image_paths[self.image_index])
+    scaled_preview = scaled_preview.scale_simple(64, 64, GdkPixbuf.InterType.BILINEAR)
     # Change image scale
-    maker.image.set_pixel_size(128)
+    maker.image.new_from_pixbuf(scaled_preview)
     maker.results.set_text(last_results)
 # Make Gtk Window
 class app(Gtk.Window):
