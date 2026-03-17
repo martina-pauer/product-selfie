@@ -66,7 +66,7 @@ class ImageRanker:
       Render Gtk app on the screen.
     '''    
     try:
-      maker.image.set_from_file(self.paths[self.image_index])
+      maker.image.set_from_file(self.image_paths[self.image_index])
       maker.show_all()
       Gtk.main()
     except:
