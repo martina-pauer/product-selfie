@@ -13,7 +13,10 @@ class ImageRanker:
     '''
       Gtk Graphical User Interface
     '''
-    self.image_paths: list[str] = ['./First.jpg', './Second.jpg', './Third.jpg']
+    # Folder Prefix Setting
+    self.prefix = './'
+    # Class Atributes
+    self.image_paths: list[str] = [f'{self.prefix}First.jpg', f'{self.prefix}Second.jpg', f'{self.prefix}Third.jpg']
     self.image_index: int = 0
     # Key: Category, Value: Category Path
     self.category_paths: dict[str, str] = {}
@@ -24,6 +27,7 @@ class ImageRanker:
       if not line.__contains__('Category'):
         # Load without newlines for get the path and names right
         part: list[str] = line.replace('\n', '').split(', ')
+        part[1] = f'{self.prefix}{part[1]}'
         self.category_paths.__setitem__(part[0], part[1])
         del part
         # Make folder if not exist
