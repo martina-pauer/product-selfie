@@ -66,7 +66,11 @@ class ImageRanker:
       Render Gtk app on the screen.
     '''    
     try:
-      maker.image.set_from_file(self.image_paths[self.image_index])
+      # Create Scaled Image From The Original  
+      scaled_preview = GdkPixbuf.Pixbuf.new_from_file(self.image_paths[self.image_index])
+      scaled_preview = scaled_preview.scale_simple(64, 64, GdkPixbuf.InterpType.BILINEAR)
+      # Change image scale
+      maker.image.new_from_pixbuf(scaled_preview)
       maker.show_all()
       Gtk.main()
     except:
@@ -98,7 +102,7 @@ class ImageRanker:
       self.image_index += 1  
     # Create Scaled Image From The Original  
     scaled_preview = GdkPixbuf.Pixbuf.new_from_file(self.image_paths[self.image_index])
-    scaled_preview = scaled_preview.scale_simple(64, 64, GdkPixbuf.InterType.BILINEAR)
+    scaled_preview = scaled_preview.scale_simple(64, 64, GdkPixbuf.InterpType.BILINEAR)
     # Change image scale
     maker.image.new_from_pixbuf(scaled_preview)
     maker.results.set_text(last_results)
