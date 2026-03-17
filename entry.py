@@ -71,10 +71,14 @@ class ImageRanker:
     '''    
     try:
       # Create Scaled Image From The Original  
-      scaled_preview = GdkPixbuf.Pixbuf.new_from_file(self.image_paths[self.image_index])
-      scaled_preview = scaled_preview.scale_simple(64, 64, GdkPixbuf.InterpType.BILINEAR)
+      scaled_preview = GdkPixbuf.Pixbuf.new_from_file_at_scale(
+            filename = self.image_paths[self.image_index],
+            width = 250,
+            height = 250,
+            preserve_aspect_ratio = True
+          )
       # Change image scale
-      maker.image.new_from_pixbuf(scaled_preview)
+      maker.image.set_from_pixbuf(scaled_preview)
       maker.show_all()
       Gtk.main()
     except:
@@ -99,16 +103,20 @@ class ImageRanker:
       Auxiliar internal method for load
       next image and show last results
     '''
-    if self.image_index >= self.image_paths.__len__():
+    if self.image_index >= (self.image_paths.__len__() - 1):
       # When has the image max restar image index
       self.image_index = 0
     else:
       self.image_index += 1  
     # Create Scaled Image From The Original  
-    scaled_preview = GdkPixbuf.Pixbuf.new_from_file(self.image_paths[self.image_index])
-    scaled_preview = scaled_preview.scale_simple(64, 64, GdkPixbuf.InterpType.BILINEAR)
+    scaled_preview = GdkPixbuf.Pixbuf.new_from_file_at_scale(
+          filename = self.image_paths[self.image_index],
+          width = 250,
+          height = 250,
+          preserve_aspect_ratio = True
+        )
     # Change image scale
-    maker.image.new_from_pixbuf(scaled_preview)
+    maker.image.set_from_pixbuf(scaled_preview)
     maker.results.set_text(last_results)
 # Make Gtk Window
 class app(Gtk.Window):
