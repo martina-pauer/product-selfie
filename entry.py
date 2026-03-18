@@ -29,11 +29,11 @@ class ImageRanker:
         part: list[str] = line.replace('\n', '').split(', ')
         part[1] = f'{self.prefix}{part[1]}'
         self.category_paths.__setitem__(part[0], part[1])
-        del part
         # Make folder if not exist
         try:
           import os
           os.system(f'mkdir -p {part[1]}')
+          del part
         except:
           pass
 
@@ -91,6 +91,7 @@ class ImageRanker:
     '''
     result: str = ''
     # Add each one of the categories and how much images has each one
+    self.move_files()
     for category in self.category_paths.keys():
       result += f'\n\nCategory: {category},\tImages: {report.count_from_folders(category)}' 
     # Show the result  
