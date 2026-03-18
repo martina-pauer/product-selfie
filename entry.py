@@ -104,7 +104,7 @@ class ImageRanker:
       Auxiliar internal method for load
       next image and show last results
     '''
-    if self.image_index >= (self.image_paths.__len__() - 1):
+    if self.image_index > (self.image_paths.__len__() - 1):
       # When has the image max restar image index
       self.image_index = 0
     else:
