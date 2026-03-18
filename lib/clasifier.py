@@ -66,12 +66,12 @@ class DatagramGenerator:
       '''
         Write the HTML output
       '''
-      prefix: str = '.'
+      prefix: str = './'
       # Prepare and proceed
       try:
         # Delete if exist old files
         import os
-        os.system(f'rm {prefix}/{name}')
+        os.system(f'rm {prefix}{name}')
         del prefix
       except:
         pass
@@ -81,17 +81,22 @@ class DatagramGenerator:
       content: str = '<!DOCTYPE html>\n\t'
       # Page Metadata
       content += '<head>\n\t\t'
+      content += '<title>Categorize Images</title>\n\t\t'
+      content += '<meta charset = "UTF-8"/>\n\t\t'
+      content += '<meta name = "viewport" content = "initial-scale = 1.0, width = device-width, height = device-height" />\n\t\t'
+      content += '<meta name = "author" content = "Martina Pauer Software (MPS)" />\n\t\t'
+      content += '<meta name = "keywords" content = "image clasification, clasification" />\n\t\t'
       content += '</head>\n\t'
       # Visible Part
       content += '<body>\n\t\t'
       for category in self.poll.keys():
         # Count the images in each category
         content += '<div style = "text-align: center; padding: 0.5em; border: 2px solid black; border-radius: 0.5em; background: #2535cf; color: #efefef; font-weight: 840;">\n\t\t\t'
-        content += f'{category}<span style = "text-align: center; margin: 0.5 padding: 0.5em; border: 2px solid black; background: #efefef; color: black; font-weight: 840;">{self.poll[category]}</span\n'
+        content += f'{category}<span style = "text-align: center; margin: 0.5 padding: 0.5em; border: 2px solid black; background: #efefef; color: black; font-weight: 840;">{self.poll[category]}</span>\n'
         content += '\t\t</div>\n\t\t'
       # HTML ending  
       content += '</body>\n'
-      content += '<html>'
+      content += '</html>'
       # Create and write html
       output = open(name, 'x')
       output.write(content)
