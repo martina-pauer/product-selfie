@@ -62,8 +62,6 @@ class ImageRanker:
         pass  
     # Free Out memory
     del os
-    # When the file was moved restart all
-    self.__init__()
 
   def show_graphical_interface(self):
     '''
