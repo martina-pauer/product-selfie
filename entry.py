@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 # Gtk App for Data Entry Human Worker
 from lib.clasifier import DatagramGenerator as report
+from lib.clasifier import ImageClasify as img
 # Initialize object for could use it with all his atributes
 report = report()
 # Use global modules for the graphicals works
@@ -16,7 +17,16 @@ class ImageRanker:
     # Folder Prefix Setting
     self.prefix = './'
     # Class Atributes
-    self.image_paths: list[str] = [f'{self.prefix}First.jpg', f'{self.prefix}Second.jpg', f'{self.prefix}Third.jpg']
+    import os
+    os.system(f'ls {self.prefix} >> temp.txt')
+    self.image_paths: list[str] = []
+    with open('temp.txt', 'r') as image:
+      # Add Image paths when are the image type
+      if image.__contains__(img.image_type):
+        image = image.replace('\n', '')
+        self.image_paths.append(f'{self.prefix}{image}')
+    os.system('rm temp.txt')    
+    del os    
     self.image_index: int = 0
     # Key: Category, Value: Category Path
     self.category_paths: dict[str, str] = {}

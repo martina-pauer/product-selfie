@@ -119,7 +119,7 @@ class  ImageClasify:
 
     self.category: str = 'First'
 
-    self.image_type: str = 'jpg'
+    self.image_type: str = '.jpg'
 
   def set_name(self, name: str, folder_path: str):
     '''
