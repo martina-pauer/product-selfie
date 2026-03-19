@@ -112,11 +112,11 @@ class ImageRanker:
       Auxiliar internal method for load
       next image and show last results
     '''
-    if self.image_index > (self.image_paths.__len__() - 1):
+    if self.image_index < (self.image_paths.__len__() - 1):
       # When has the image max restar image index
-      self.image_index = 0
+      self.image_index += 1
     else:
-      self.image_index += 1  
+      self.image_index = 0  
     # Create Scaled Image From The Original  
     scaled_preview = GdkPixbuf.Pixbuf.new_from_file_at_scale(
           filename = self.image_paths[self.image_index],
