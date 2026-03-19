@@ -3,7 +3,8 @@
 from lib.clasifier import DatagramGenerator as report
 from lib.clasifier import ImageClasify as img
 # Initialize object for could use it with all his atributes
-report = report()
+report = report().__init__()
+img = img().__init__()
 # Use global modules for the graphicals works
 import gi
 gi.require_version('Gtk', '3.0')
@@ -21,10 +22,11 @@ class ImageRanker:
     os.system(f'ls {self.prefix} >> temp.txt')
     self.image_paths: list[str] = []
     with open('temp.txt', 'r') as image:
+      line = image.readline()
       # Add Image paths when are the image type
-      if image.__contains__(img.image_type):
-        image = image.replace('\n', '')
-        self.image_paths.append(f'{self.prefix}{image}')
+      if line.__contains__(img.image_type):
+        line = line.replace('\n', '')
+        self.image_paths.append(f'{self.prefix}{line}')
     os.system('rm temp.txt')    
     del os    
     self.image_index: int = 0
@@ -33,7 +35,7 @@ class ImageRanker:
     # Get categories from data/conf.csv one time for optimize
     config = open('data/conf.csv', 'r')
     # Add each category to categories register
-    for line in config:
+    for line in config.readlines():
       if not line.__contains__('Category'):
         # Load without newlines for get the path and names right
         part: list[str] = line.replace('\n', '').split(', ')
