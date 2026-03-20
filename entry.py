@@ -3,8 +3,8 @@
 from lib.clasifier import DatagramGenerator as report
 from lib.clasifier import ImageClasify as img
 # Initialize object for could use it with all his atributes
-report = report().__init__()
-img = img().__init__()
+report = report()
+img = img()
 # Use global modules for the graphicals works
 import gi
 gi.require_version('Gtk', '3.0')
