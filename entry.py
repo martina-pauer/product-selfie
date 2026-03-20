@@ -22,11 +22,12 @@ class ImageRanker:
     os.system(f'ls {self.prefix} >> temp.txt')
     self.image_paths: list[str] = []
     with open('temp.txt', 'r') as image:
-      line = image.readline()
+      line = image.readline().split(' ')
       # Add Image paths when are the image type
-      if line.__contains__(img.image_type):
-        line = line.replace('\n', '')
-        self.image_paths.append(f'{self.prefix}{line}')
+      for content in line:
+        # Foreach file name only add whose has image file extension
+        if content.__contains__(img.image_type):
+          self.image_paths.append(f'{self.prefix}{content.replace("\n", "").replace("\t", "")}')
     os.system('rm temp.txt')    
     del os    
     self.image_index: int = 0
