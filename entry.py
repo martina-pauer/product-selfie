@@ -27,7 +27,9 @@ class ImageRanker:
       for content in line:
         # Foreach file name only add whose has image file extension
         if content.__contains__(img.image_type):
-          self.image_paths.append(f'{self.prefix}{content.replace("\n", "").replace("\t", "")}')
+          image_name: str = content.replace("\n", "").replace("\t", "")
+          self.image_paths.append(f'{self.prefix}{image_name}')
+          del image_name
     os.system('rm temp.txt')    
     del os    
     self.image_index: int = 0
