@@ -22,14 +22,14 @@ class ImageRanker:
         os.system(f'ls {self.prefix} >> temp.txt')
         self.image_paths: list[str] = []
         with open('temp.txt', 'r') as image:
-           line = image.readline().split(' ')
+            line = image.readline().split(' ')
         # Add Image paths when are the image type
         for content in line:
             # Foreach file name only add whose has image file extension
             if content.__contains__(img.image_type):
-              image_name: str = content.replace("\n", "").replace("\t", "")
-              self.image_paths.append(f'{self.prefix}{image_name}')
-              del image_name
+                image_name: str = content.replace("\n", "").replace("\t", "")
+                self.image_paths.append(f'{self.prefix}{image_name}')
+                del image_name
         os.system('rm temp.txt')
         del os
         self.image_index: int = 0
@@ -39,11 +39,11 @@ class ImageRanker:
         config = open('data/conf.csv', 'r')
         # Add each category to categories register
         for line in config.readlines():
-          if not line.__contains__('Category'):
-            # Load without newlines for get the path and names right
-            part: list[str] = line.replace('\n', '').split(', ')
-            part[1] = f'{self.prefix}{part[1]}'
-            self.category_paths.__setitem__(part[0], part[1])
+            if not line.__contains__('Category'):
+              # Load without newlines for get the path and names right
+                part: list[str] = line.replace('\n', '').split(', ')
+                part[1] = f'{self.prefix}{part[1]}'
+                self.category_paths.__setitem__(part[0], part[1])
         # Make folder if not exist
         try:
             import os
@@ -70,9 +70,9 @@ class ImageRanker:
         for image in self.image_paths:
          # Add exception handle for don't give systems errors
             try:
-              os.system(f'mv {image} {self.category_paths[image]}')
+                os.system(f'mv {image} {self.category_paths[image]}')
             except:
-              pass
+                pass
         # Free Out memory
         del os
 
