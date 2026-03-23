@@ -46,7 +46,6 @@ class ImageRanker:
                 self.category_paths.__setitem__(part[0], part[1])
         # Make folder if not exist
         try:
-            import os
             os.system(f'mkdir -p {part[1]}')
             del part, os
         except:
