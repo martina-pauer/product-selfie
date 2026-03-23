@@ -11,17 +11,17 @@ gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk, GdkPixbuf
 # Make ImageRanker class before window class
 class ImageRanker:
-  def __init__(self):
-    '''
-      Gtk Graphical User Interface
-    '''
-    # Folder Prefix Setting
-    self.prefix = './'
-    # Class Atributes
-    import os
-    os.system(f'ls {self.prefix} >> temp.txt')
-    self.image_paths: list[str] = []
-    with open('temp.txt', 'r') as image:
+    def __init__(self):
+      '''
+        Gtk Graphical User Interface
+      '''
+      # Folder Prefix Setting
+      self.prefix = './'
+      # Class Atributes
+      import os
+      os.system(f'ls {self.prefix} >> temp.txt')
+      self.image_paths: list[str] = []
+      with open('temp.txt', 'r') as image:
       line = image.readline().split(' ')
       # Add Image paths when are the image type
       for content in line:
@@ -30,59 +30,96 @@ class ImageRanker:
           image_name: str = content.replace("\n", "").replace("\t", "")
           self.image_paths.append(f'{self.prefix}{image_name}')
           del image_name
-    os.system('rm temp.txt')    
-    del os    
-    self.image_index: int = 0
-    # Key: Category, Value: Category Path
-    self.category_paths: dict[str, str] = {}
-    # Get categories from data/conf.csv one time for optimize
-    config = open('data/conf.csv', 'r')
-    # Add each category to categories register
-    for line in config.readlines():
-      if not line.__contains__('Category'):
-        # Load without newlines for get the path and names right
-        part: list[str] = line.replace('\n', '').split(', ')
-        part[1] = f'{self.prefix}{part[1]}'
-        self.category_paths.__setitem__(part[0], part[1])
-        # Make folder if not exist
+        os.system('rm temp.txt')    
+      del os    
+      self.image_index: int = 0
+      # Key: Category, Value: Category Path
+      self.category_paths: dict[str, str] = {}
+      # Get categories from data/conf.csv one time for optimize
+      config = open('data/conf.csv', 'r')
+      # Add each category to categories register
+      for line in config.readlines():
+        if not line.__contains__('Category'):
+          # Load without newlines for get the path and names right
+          part: list[str] = line.replace('\n', '').split(', ')
+          part[1] = f'{self.prefix}{part[1]}'
+          self.category_paths.__setitem__(part[0], part[1])
+          # Make folder if not exist
+          try:
+            import os
+            os.system(f'mkdir -p {part[1]}')
+            del part, os
+          except:
+            pass
+      # Close file to Free Out memmory and could use it in the future    
+      config.close()
+      del config
+      # Add categories to the report object      
+      for category_path in list(self.category_paths.values()):
+        # Get the category paths for get categories
+        separate: list[str] = category_path.split('/')
+        report.add_category(separate[separate.__len__() - 1], category_path)    
+
+    def move_files(self):
+      '''
+        From the folder where are the image move
+        to the folder with image with same category.
+      '''
+      import os
+      # Get images folder path and where move
+      for image in self.image_paths:
+        # Add exception handle for don't give systems errors
         try:
-          import os
-          os.system(f'mkdir -p {part[1]}')
-          del part
+          os.system(f'mv {image} {self.category_paths[image]}')
         except:
-          pass
+          pass  
+      # Free Out memory
+      del os
 
-        del os
-    # Close file to Free Out memmory and could use it in the future    
-    config.close()
-    del config
-    # Add categories to the report object      
-    for category_path in list(self.category_paths.values()):
-      # Get the category paths for get categories
-      separate: list[str] = category_path.split('/')
-      report.add_category(separate[separate.__len__() - 1], category_path)    
-
-  def move_files(self):
-    '''
-      From the folder where are the image move
-      to the folder with image with same category.
-    '''
-    import os
-    # Get images folder path and where move
-    for image in self.image_paths:
-      # Add exception handle for don't give systems errors
+    def show_graphical_interface(self):
+      '''
+        Render Gtk app on the screen.
+      '''    
       try:
-        os.system(f'mv {image} {self.category_paths[image]}')
+        # Create Scaled Image From The Original  
+        scaled_preview = GdkPixbuf.Pixbuf.new_from_file_at_scale(
+              filename = self.image_paths[self.image_index],
+              width = 250,
+              height = 250,
+              preserve_aspect_ratio = True
+            )
+        # Change image scale
+        maker.image.set_from_pixbuf(scaled_preview)
+        maker.show_all()
+        Gtk.main()
       except:
-        pass  
-    # Free Out memory
-    del os
+        maker.close()  
 
-  def show_graphical_interface(self):
-    '''
-      Render Gtk app on the screen.
-    '''    
-    try:
+    def update_poll_visualizer(self, widget: Gtk.Button):
+      '''
+        Update stats visualization and make more current HTML output
+        for keep up to date the information very fast.
+      '''
+      result: str = ''
+      # Add each one of the categories and how much images has each one
+      self.move_files()
+      for category in self.category_paths.keys():
+        result += f'\n\nCategory: {category},\tImages: {report.count_from_folders(category)}' 
+      # Show the result  
+      self.refresh_interface(result)
+      # Make the report  
+      report.write_file('data/report.html')
+    
+    def  refresh_interface(self, last_results: str):
+      '''
+        Auxiliar internal method for load
+        next image and show last results
+      '''
+      if self.image_index < (self.image_paths.__len__() - 1):
+        # When has the image max restar image index
+        self.image_index += 1
+      else:
+        self.image_index = 0  
       # Create Scaled Image From The Original  
       scaled_preview = GdkPixbuf.Pixbuf.new_from_file_at_scale(
             filename = self.image_paths[self.image_index],
@@ -92,46 +129,7 @@ class ImageRanker:
           )
       # Change image scale
       maker.image.set_from_pixbuf(scaled_preview)
-      maker.show_all()
-      Gtk.main()
-    except:
-      maker.close()  
-
-  def update_poll_visualizer(self, widget: Gtk.Button):
-    '''
-      Update stats visualization and make more current HTML output
-      for keep up to date the information very fast.
-    '''
-    result: str = ''
-    # Add each one of the categories and how much images has each one
-    self.move_files()
-    for category in self.category_paths.keys():
-      result += f'\n\nCategory: {category},\tImages: {report.count_from_folders(category)}' 
-    # Show the result  
-    self.refresh_interface(result)
-    # Make the report  
-    report.write_file('data/report.html')
-    
-  def  refresh_interface(self, last_results: str):
-    '''
-      Auxiliar internal method for load
-      next image and show last results
-    '''
-    if self.image_index < (self.image_paths.__len__() - 1):
-      # When has the image max restar image index
-      self.image_index += 1
-    else:
-      self.image_index = 0  
-    # Create Scaled Image From The Original  
-    scaled_preview = GdkPixbuf.Pixbuf.new_from_file_at_scale(
-          filename = self.image_paths[self.image_index],
-          width = 250,
-          height = 250,
-          preserve_aspect_ratio = True
-        )
-    # Change image scale
-    maker.image.set_from_pixbuf(scaled_preview)
-    maker.results.set_text(last_results)
+      maker.results.set_text(last_results)
 # Make Gtk Window
 class app(Gtk.Window):
     def __init__(self):
