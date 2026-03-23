@@ -35,7 +35,7 @@ class VarsFollowing:
             for future consult without make complicated
             code
         '''   
-        result: str = f'{self.date[name]}: {name}, {self.kinds[name]} -> {self.vars[name]}'
+        result: str = f'\t{self.date[name]}: {name}, {self.kinds[name]} -> {self.vars[name]}\n'
         
         with open('debug.log', 'a') as debugger:
             debugger.write(result)
