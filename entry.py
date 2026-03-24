@@ -7,11 +7,15 @@ from lib.debugger import VarsFollowing as dbg
 report = report()
 img = img()
 dbg = dbg()
+# This procedure need be defined within the module for get access to vars
+def follow(name: str, kind: str, moment: str):
+    dbg.set_var(name, kind, f'eval(name)')
+    dbg.set_moment(name, moment)
+    dbg.get_following(name)
 # Make start following
 for name in ['report', 'img', 'dbg']:
-    dbg.set_var(f'{name}', 'lib object')
-    dbg.set_moment(name, 'Start Line 1 to 9')
-    dbg.get_following(name)   
+    # 3 lines saved
+    follow(f'{name}', 'lib object', 'Start Line 1 to 9')   
 # Use global modules for the graphicals works
 import gi
 gi.require_version('Gtk', '3.0')
@@ -24,26 +28,36 @@ class ImageRanker:
         '''
         # Folder Prefix Setting
         self.prefix = './'
+        # Following: 6 lines saved
+        follow('ImageRanker().prefix', 'text', 'ImageRanker().__init__(): Line 26')
         # Class Atributes
         import os
         os.system(f'ls {self.prefix} >> temp.txt')
         self.image_paths: list[str] = []
+        # 9 lines saved: for don't repeat lines save lines multiples of function
+        follow('ImageRanker().image_paths', 'Text List', 'ImageRanker().__init__(): Line 36')
         with open('temp.txt', 'r') as image:
             line = image.readline().split(' ')
-        # Add Image paths when are the image type
-        for content in line:
-            # Foreach file name only add whose has image file extension
-            if content.__contains__(img.image_type):
-                image_name: str = content.replace("\n", "").replace("\t", "")
-                self.image_paths.append(f'{self.prefix}{image_name}')
-                del image_name
+            follow('line', 'text', '"temp.txt" loop: Line 39 to 41')
+            # Add Image paths when are the image type
+            for content in line:
+                # Foreach file name only add whose has image file extension
+                if content.__contains__(img.image_type):
+                    image_name: str = content.replace("\n", "").replace("\t", "")
+                    self.image_paths.append(f'{self.prefix}{image_name}')
+                    follow('image_name', 'text', f'Images For Loop "{content}" iteration: lines 43 to 47')
+                    follow('ImageRanker().image_paths', 'Text List', f'Images For Loop "{content}" iteration: lines 43 to 47')
+                    del image_name
         os.system('rm temp.txt')
         del os
         self.image_index: int = 0
+        follow('ImageRanker().image_index', 'integer', 'Line 53: Image Selector Index')
         # Key: Category, Value: Category Path
         self.category_paths: dict[str, str] = {}
+        follow('ImageRanker().category_paths', 'Name to Paths Text Dictionary', 'Line 56: Category Paths Getter')
         # Get categories from data/conf.csv one time for optimize
         config = open('data/conf.csv', 'r')
+        follow('config', 'File Handler', 'Line 59: Open data/conf.csv as reading')
         # Add each category to categories register
         for line in config.readlines():
             if not line.__contains__('Category'):
@@ -51,6 +65,9 @@ class ImageRanker:
                 part: list[str] = line.replace('\n', '').split(', ')
                 part[1] = f'{self.prefix}{part[1]}'
                 self.category_paths.__setitem__(part[0], part[1])
+                follow('part', 'Text List', 'Line 62 to 67: data/conf.csv Lines Reading')
+                follow('ImageRanker().prefix', 'text', 'Line 62 to 67: data/conf.csv Lines Reading')
+                follow('ImageRanker().category_paths', 'Name To Paths Text Dictionary', 'Lines 62 to 67: data/conf.csv Line Reading')
         # Make folder if not exist
         try:
             os.system(f'mkdir -p {part[1]}')
@@ -65,12 +82,17 @@ class ImageRanker:
             # Get the category paths for get categories
             separate: list[str] = category_path.split('/')
             report.add_category(separate[separate.__len__() - 1], category_path)
+            # Make Following Over the Loop Iterations
+            follow('separate', 'Text List', f'Lines 81 to 84: For Loop with category_path Equal To "{category_path}"')
           
     def move_files(self):
         '''
           From the folder where are the image move
           to the folder with image with same category.
         '''
+        # Make Following
+        follow('ImageRanker().image_paths', 'Text List', 'ImageRanker move_files Method')
+        follow('ImageRanker().category_paths', 'Name To Paths Text Dictionary', 'ImageRanker move_files method')
         import os
         # Get images folder path and where move
         for image in self.image_paths:
@@ -78,7 +100,7 @@ class ImageRanker:
             try:
                 os.system(f'mv {image} {self.category_paths[image]}')
             except:
-                pass
+                pass 
         # Free Out memory
         del os
 
@@ -174,6 +196,8 @@ class app(Gtk.Window):
 # Show all
 maker = app()
 maker.connect('delete-event', Gtk.main_quit)
+follow('maker', 'Gtk.Window extended "app" object', 'main program')
 # Run the program
 program = ImageRanker()
+follow('program', 'ImageRanker object', 'main program')
 program.show_graphical_interface() 

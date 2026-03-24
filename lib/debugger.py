@@ -12,13 +12,12 @@ class VarsFollowing:
         # Key: Var name, Value: Var type
         self.kinds: dict = {}
         
-    def set_var(self, name: str, kind: str):
+    def set_var(self, name: str, kind: str, value: str):
         '''
             Add a new var with his value
         '''
         # Reduce mistakes and lines from two to one
-        # The variable is global to method then the value could be automatic getted
-        self.vars.__setitem__(name, eval(name).__str__())
+        self.vars.__setitem__(name, value)
         self.kinds.__setitem__(name, kind)
 
     def set_moment(self, name: str, moment: str):
