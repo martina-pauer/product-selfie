@@ -172,21 +172,25 @@ class ImageRanker:
         if self.image_index < (self.image_paths.__len__() - 1):
             # When has the image max restar image index
             self.image_index += 1
-            follow('ImageRanker().image_index', 'integer', 'ImageRanker: Refresh Graphics')
+            dbg.set_var('ImageRanker().image_index', 'integer', f'{self.image_index}')
+            follow('ImageRanker().image_index', 'ImageRanker: Refresh Graphics')
         else:
             self.image_index = 0
-            follow('ImageRanker().image_index', 'integer', 'ImageRanker: Refresh Graphics')
+            dbg.set_var('ImageRanker().image_index', 'integer', f'{self.image_index}')
+            follow('ImageRanker().image_index', 'ImageRanker: Refresh Graphics')
         # Create Scaled Image From The Original
-        scaled_preview = GdkPixbuf.Pixbuf.new_from_file_at_scale(
+        scaled_preview_second = GdkPixbuf.Pixbuf.new_from_file_at_scale(
             filename = self.image_paths[self.image_index],
             width = 250, height = 250,
             preserve_aspect_ratio = True
         )
-        follow('ImageRanker().scaled_preview', 'Gdk Pixbuf', 'ImageRanker: Refresh Graphics')
+        dbg.set_var('scaled_preview_second', 'Gdk Pixbuf', f'{eval("scaled_preview_second")}')
+        follow('scaled_preview_second', 'ImageRanker: Refresh Graphics')
         # Change image scale
-        maker.image.set_from_pixbuf(scaled_preview)
+        maker.image.set_from_pixbuf(scaled_preview_second)
         maker.results.set_text(last_results)
-        follow('maker', 'Gtk.Window extended "app" object', 'ImageRanker: Refresh Graphics')
+        dbg.set_var('maker', 'Gtk.Window extended "app" object', f'{eval("maker")}')
+        follow('maker', 'ImageRanker: Refresh Graphics')
 # Make Gtk Window
 class app(Gtk.Window):
     def __init__(self):
