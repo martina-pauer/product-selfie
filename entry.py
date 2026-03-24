@@ -8,14 +8,14 @@ report = report()
 img = img()
 dbg = dbg()
 # This procedure need be defined within the module for get access to vars
-def follow(follow_name: str, kind: str, moment: str):
-    dbg.set_var(follow_name, kind, f'{eval(follow_name)}')
+def follow(follow_name: str, moment: str):
     dbg.set_moment(follow_name, moment)
     dbg.get_following(follow_name)
 # Make start following
-for name in ['report', 'img', 'dbg']:
-    # 3 lines saved
-    follow(f'{name}', 'lib object', 'Start Line 1 to 9')   
+for follow_name in ['report', 'img', 'dbg']:
+    # 2 lines saved
+    dbg.set_var(follow_name, 'lib object', f'{eval(follow_name)}')
+    follow(f'{follow_name}', 'Start Line 1 to 9')   
 # Use global modules for the graphicals works
 import gi
 gi.require_version('Gtk', '3.0')
@@ -177,24 +177,31 @@ class app(Gtk.Window):
         self.set_size_request(480, 480)
         # Containers
         self.big_container = Gtk.VBox()
-        #follow('app().big_container', 'Gtk Vertical Box Container', 'Window Making: Start')
+        dbg.set_var('self.big_container', 'Gtk Vertical Box Container', f'{eval("self.big_container")}')
+        follow('app().big_container', 'Window Making: Start')
         self.image_container = Gtk.VBox()
-        #follow('app().image_container', 'Gtk Vertical Box Container', 'Window Making: Start')
+        dbg.set_var('self.image_container', 'Gtk Vertical Box Container', f'{eval("self.image_container")}')
+        follow('app().image_container', 'Window Making: Start')
         self.form_container = Gtk.VBox()
-        #follow('app().form_container', 'Gtk Vertical Box Container', 'Window Making: Start')
+        dbg.set_var('self.form_container', 'Gtk Vertical Box Container', f'{eval("self.form_container")}')
+        follow('app().form_container', 'Window Making: Start')
         self.results_container = Gtk.VBox()
-        #follow('app().results_container', 'Gtk Vertical Box Container', 'Window Making: Start')
+        dbg.set_var('self.results_container', 'Gtk Vertical Box Container', f'{eval("self.results_container")}')
+        follow('app().results_container', 'Window Making: Start')
         # Image View
         self.image = Gtk.Image()
-        #follow('app().image', 'Gtk Image Widget', 'Window Making: Start')
+        dbg.set_var('self.image', 'Gtk Image Widget', f'{eval(self.image)}')
+        follow('app().image', 'Window Making: Start')
         # Category Selection Menu
         self.categories_menu = Gtk.ComboBoxText()
         self.categories_menu.set_entry_text_column(0)
-        #follow('app().categories_menu', 'Gtk Options Selections Menu', 'Window Making: Start')
+        dbg.set_var('self.categories_menu', 'Gtk Options Selections Menu', f'{eval("self.categories_menu")}')
+        follow('app().categories_menu', 'Window Making: Start')
       
         for category in ImageRanker().category_paths.keys():
             self.categories_menu.append_text(category)
-            follow('category', 'text', 'Window Making: Categories Adding For Loop')
+            dbg.set_var('category', 'text', f'{eval("category")}')
+            follow('category', 'Window Making: Categories Adding For Loop')
         # Sender Button
         # From lines 189 to 198 don't make following for not get over information than only slow the program
         self.sender = Gtk.Button(label = 'Categorize')
@@ -210,15 +217,19 @@ class app(Gtk.Window):
         # Add containers to window
         for container in [self.image_container, self.form_container, self.results_container]:
             self.big_container.pack_start(container, True, True, 0)
-            #follow('container', 'Gtk Widgets Container', 'Window Making: Add Containers For Loop')
-            #follow('app().big_container', 'Gtk Widgets Container', 'Window Making: Add Containers For Loop')
+            dbg.set_var('container', 'Gtk Widgets Container', f'{eval("container")}')
+            dbg.set_var("app().big_container", 'Gtk Widgets Container', f'{eval("self.big_container")}')
+            follow('container', 'Window Making: Add Containers For Loop')
+            follow('app().big_container', 'Window Making: Add Containers For Loop')
           
         self.add(self.big_container)    
 # Show all
 maker = app()
 maker.connect('delete-event', Gtk.main_quit)
-follow('maker', 'Gtk.Window extended "app" object', 'main program')
+dbg.set_var('maker', 'Gtk.Window extended "app" object', f'{eval("maker")}')
+follow('maker', 'main program')
 # Run the program
 program = ImageRanker()
-follow('program', 'ImageRanker object', 'main program')
+dbg.set_var('program', 'ImageRanker object', f'{eval("program")}')
+follow('program', 'main program')
 program.show_graphical_interface() 
