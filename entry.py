@@ -115,8 +115,11 @@ class ImageRanker:
               width = 250, height = 250,
               preserve_aspect_ratio = True
             )
+            follow('scaled_preview', 'Gdk Pixbuf', 'ImageRanker: Window Calling')
+            follow('ImageRanker().image_paths', 'Name To Paths Text Dictionary', 'ImageRanker: Window Calling')
             # Change image scale
             maker.image.set_from_pixbuf(scaled_preview)
+            follow('maker', 'Gtk.Window extended "app" object', 'ImageRanker: Window Calling')
             maker.show_all()
             Gtk.main()
         except:
@@ -128,12 +131,15 @@ class ImageRanker:
           for keep up to date the information very fast.
         '''
         result: str = ''
+        follow('result', 'text', 'ImageRanker: Window Event update_poll_visualizer')
         # Add each one of the categories and how much images has each one
         self.move_files()
         for category in self.category_paths.keys():
             counter: int = report.count_from_folders(category)
+            follow('counter', 'integer', f'ImageRanker: Window Event "{category}" For Loop')
             result = f'\n\nCategory: {category},\tImages: {counter}' 
             del counter
+            follow('result', 'text', f'ImageRanker: Window Event "{category}" For Loop')
             # Show the result
         self.refresh_interface(result)
         # Make the report
@@ -147,17 +153,21 @@ class ImageRanker:
         if self.image_index < (self.image_paths.__len__() - 1):
             # When has the image max restar image index
             self.image_index += 1
+            follow('ImageRanker().image_index', 'integer', 'ImageRanker: Refresh Graphics')
         else:
             self.image_index = 0
+            follow('ImageRanker().image_index', 'integer', 'ImageRanker: Refresh Graphics')
         # Create Scaled Image From The Original
         scaled_preview = GdkPixbuf.Pixbuf.new_from_file_at_scale(
             filename = self.image_paths[self.image_index],
             width = 250, height = 250,
             preserve_aspect_ratio = True
         )
+        follow('ImageRanker().scaled_preview', 'Gdk Pixbuf', 'ImageRanker: Refresh Graphics')
         # Change image scale
         maker.image.set_from_pixbuf(scaled_preview)
         maker.results.set_text(last_results)
+        follow('maker', 'Gtk.Window extended "app" object', 'ImageRanker: Refresh Graphics')
 # Make Gtk Window
 class app(Gtk.Window):
     def __init__(self):
