@@ -147,15 +147,18 @@ class ImageRanker:
           for keep up to date the information very fast.
         '''
         result: str = ''
-        follow('result', 'text', 'ImageRanker: Window Event update_poll_visualizer')
+        dbg.set_var('result', 'text', result)
+        follow('result', 'ImageRanker: Window Event update_poll_visualizer')
         # Add each one of the categories and how much images has each one
         self.move_files()
         for category in self.category_paths.keys():
             counter: int = report.count_from_folders(category)
-            follow('counter', 'integer', f'ImageRanker: Window Event "{category}" For Loop')
+            dbg.set_var('counter', 'integer', f'{counter}')
+            follow('counter', f'ImageRanker: Window Event "{category}" For Loop')
             result = f'\n\nCategory: {category},\tImages: {counter}' 
             del counter
-            follow('result', 'text', f'ImageRanker: Window Event "{category}" For Loop')
+            dbg.set_var('result', 'text', result)
+            follow('result', f'ImageRanker: Window Event "{category}" For Loop')
             # Show the result
         self.refresh_interface(result)
         # Make the report
