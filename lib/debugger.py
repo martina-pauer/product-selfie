@@ -12,12 +12,13 @@ class VarsFollowing:
         # Key: Var name, Value: Var type
         self.kinds: dict = {}
         
-    def set_var(self, name: str, kind: str, value: str):
+    def set_var(self, name: str, kind: str):
         '''
             Add a new var with his value
         '''
         # Reduce mistakes and lines from two to one
-        self.vars.__setitem__(name, value)
+        # The variable is global to method then the value could be automatic getted
+        self.vars.__setitem__(name, eval(name).__str__())
         self.kinds.__setitem__(name, kind)
 
     def set_moment(self, name: str, moment: str):
@@ -34,7 +35,7 @@ class VarsFollowing:
             write a debug.log file for auxiliar storage
             for future consult without make complicated
             code
-        '''   
+        '''
         result: str = f'\t{self.date[name]}: {name}, {self.kinds[name]} -> {self.vars[name]}\n'
         
         with open('debug.log', 'a') as debugger:

@@ -8,13 +8,10 @@ report = report()
 img = img()
 dbg = dbg()
 # Make start following
-dbg.set_var('report', 'lib object', 'report()')
-dbg.set_var('img', 'lib object', 'img()')
-dbg.set_var('dbg', 'lib object', 'dbg()')
-
-for name in dbg.vars.keys():
-    dbg.set_moment(name, 'Start: Line 1 to 9')
-    dbg.get_following(name)    
+for name in ['report', 'img', 'dbg']:
+    dbg.set_var(f'{name}', 'lib object')
+    dbg.set_moment(name, 'Start Line 1 to 9')
+    dbg.get_following(name)   
 # Use global modules for the graphicals works
 import gi
 gi.require_version('Gtk', '3.0')
