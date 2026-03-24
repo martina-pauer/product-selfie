@@ -8,10 +8,10 @@ report = report()
 img = img()
 dbg = dbg()
 # This procedure need be defined within the module for get access to vars
-def follow(name: str, kind: str, moment: str):
-    dbg.set_var(name, kind, f'{eval(name)}')
-    dbg.set_moment(name, moment)
-    dbg.get_following(name)
+def follow(follow_name: str, kind: str, moment: str):
+    dbg.set_var(follow_name, kind, f'{eval(follow_name)}')
+    dbg.set_moment(follow_name, moment)
+    dbg.get_following(follow_name)
 # Make start following
 for name in ['report', 'img', 'dbg']:
     # 3 lines saved
