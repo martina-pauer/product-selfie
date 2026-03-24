@@ -110,7 +110,8 @@ class ImageRanker:
          # Add exception handle for don't give systems errors
             try:
                 os.system(f'mv {image} {self.category_paths[image]}')
-                follow('image', 'text', 'ImageRanker move_files Method')
+                dbg.set_var('image', 'text', image)
+                follow('image', 'ImageRanker move_files Method')
             except:
                 pass 
         # Free Out memory
@@ -127,11 +128,14 @@ class ImageRanker:
               width = 250, height = 250,
               preserve_aspect_ratio = True
             )
-            follow('scaled_preview', 'Gdk Pixbuf', 'ImageRanker: Window Calling')
-            #follow('ImageRanker().image_paths', 'Name To Paths Text Dictionary', 'ImageRanker: Window Calling')
+            dbg.set_var('scaled_preview', 'Gdk Pixbuf', f'{eval("scaled_preview")}')
+            follow('scaled_preview', 'ImageRanker: Window Calling')
+            dbg.set_var('ImageRanker.image_paths', 'Name To Paths Text Dictionary', f'{eval("self.image_paths")}')
+            follow('ImageRanker().image_paths', 'ImageRanker: Window Calling')
             # Change image scale
             maker.image.set_from_pixbuf(scaled_preview)
-            follow('maker', 'Gtk.Window extended "app" object', 'ImageRanker: Window Calling')
+            dbg.set_var('maker', 'Gtk.Window extended "app" object', f'{eval("maker")}')
+            follow('maker', 'ImageRanker: Window Calling')
             maker.show_all()
             Gtk.main()
         except:
