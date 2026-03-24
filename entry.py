@@ -34,30 +34,37 @@ class ImageRanker:
         import os
         os.system(f'ls {self.prefix} >> temp.txt')
         self.image_paths: list[str] = []
-        # 9 lines saved: for don't repeat lines save lines multiples of function
-        #follow('ImageRanker().image_paths', 'Text List', 'ImageRanker().__init__(): Line 36')
+        # 8 lines saved: for don't repeat lines save lines multiples of function
+        dbg.set_var('ImageRanker().image_paths', 'Text List', f'{eval("self.image_paths")}')
+        follow('ImageRanker().image_paths', 'ImageRanker().__init__(): Line 36')
         with open('temp.txt', 'r') as image:
             line = image.readline().split(' ')
-            follow('line', 'text', '"temp.txt" loop: Line 39 to 41')
+            dbg.set_var('line', 'text', f'{eval("line")}')
+            follow('line', '"temp.txt" loop: Line 39 to 41')
             # Add Image paths when are the image type
             for content in line:
                 # Foreach file name only add whose has image file extension
                 if content.__contains__(img.image_type):
                     image_name: str = content.replace("\n", "").replace("\t", "")
                     self.image_paths.append(f'{self.prefix}{image_name}')
-                    follow('image_name', 'text', f'Images For Loop "{content}" iteration: lines 43 to 47')
-                    #follow('ImageRanker().image_paths', 'Text List', f'Images For Loop "{content}" iteration: lines 43 to 47')
+                    dbg.set_var('image_name', 'text', image_name)
+                    follow('image_name', f'Images For Loop "{content}" iteration: lines 43 to 47')
+                    dbg.set_var('ImageRanker().image_paths', 'Text List', f'{eval("self.image_paths")}')
+                    follow('ImageRanker().image_paths', f'Images For Loop "{content}" iteration: lines 43 to 47')
                     del image_name
         os.system('rm temp.txt')
         del os
         self.image_index: int = 0
-        #follow('ImageRanker().image_index', 'integer', 'Line 53: Image Selector Index')
+        dbg.set_var('ImageRanker().image_index', 'integer', f'{eval("self.image_index")}')
+        follow('ImageRanker().image_index', 'Line 53: Image Selector Index')
         # Key: Category, Value: Category Path
         self.category_paths: dict[str, str] = {}
-        #follow('ImageRanker().category_paths', 'Name to Paths Text Dictionary', 'Line 56: Category Paths Getter')
+        dbg.set_var('ImageRanker().category_paths', 'Name To Paths Text Dictionary', f'{eval("self.category_paths")}')
+        follow('ImageRanker().category_paths', 'Line 56: Category Paths Getter')
         # Get categories from data/conf.csv one time for optimize
         config = open('data/conf.csv', 'r')
-        follow('config', 'File Handler', 'Line 59: Open data/conf.csv as reading')
+        dbg.set_var('config', 'File Handler', f'{eval("config")}')
+        follow('config', 'Line 59: Open data/conf.csv as reading')
         # Add each category to categories register
         for line in config.readlines():
             if not line.__contains__('Category'):
@@ -65,9 +72,12 @@ class ImageRanker:
                 part: list[str] = line.replace('\n', '').split(', ')
                 part[1] = f'{self.prefix}{part[1]}'
                 self.category_paths.__setitem__(part[0], part[1])
-                follow('part', 'Text List', 'Line 62 to 67: data/conf.csv Lines Reading')
-                #follow('ImageRanker().prefix', 'text', 'Line 62 to 67: data/conf.csv Lines Reading')
-                #follow('ImageRanker().category_paths', 'Name To Paths Text Dictionary', 'Lines 62 to 67: data/conf.csv Line Reading')
+                dbg.set_var('part', 'Text List', f'{eval("part")}')
+                follow('part', 'Line 62 to 67: data/conf.csv Lines Reading')
+                dbg.set_var('ImageRanker().prefix', 'text', self.prefix)
+                follow('ImageRanker().prefix', 'Line 62 to 67: data/conf.csv Lines Reading')
+                dbg.set_var('ImageRanker().category_paths', 'Name To Paths Text Dictionary', f'{eval("self.category_paths")}')
+                follow('ImageRanker().category_paths', 'Lines 62 to 67: data/conf.csv Line Reading')
         # Make folder if not exist
         try:
             os.system(f'mkdir -p {part[1]}')
@@ -83,7 +93,8 @@ class ImageRanker:
             separate: list[str] = category_path.split('/')
             report.add_category(separate[separate.__len__() - 1], category_path)
             # Make Following Over the Loop Iterations
-            follow('separate', 'Text List', f'Lines 81 to 84: For Loop with category_path Equal To "{category_path}"')
+            dbg.set_var('separate', 'Text List', f'{eval("separate")}')
+            follow('separate', f'Lines 81 to 84: For Loop with category_path Equal To "{category_path}"')
           
     def move_files(self):
         '''
