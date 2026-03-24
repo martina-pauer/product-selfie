@@ -166,18 +166,26 @@ class app(Gtk.Window):
         self.set_size_request(480, 480)
         # Containers
         self.big_container = Gtk.VBox()
+        follow('app().big_container', 'Gtk Vertical Box Container', 'Window Making: Start')
         self.image_container = Gtk.VBox()
+        follow('app().image_container', 'Gtk Vertical Box Container', 'Window Making: Start')
         self.form_container = Gtk.VBox()
+        follow('app().form_container', 'Gtk Vertical Box Container', 'Window Making: Start')
         self.results_container = Gtk.VBox()
+        follow('app().results_container', 'Gtk Vertical Box Container', 'Window Making: Start')
         # Image View
         self.image = Gtk.Image()
+        follow('app().image', 'Gtk Image Widget', 'Window Making: Start')
         # Category Selection Menu
         self.categories_menu = Gtk.ComboBoxText()
         self.categories_menu.set_entry_text_column(0)
+        follow('app().categories_menu', 'Gtk Options Selections Menu', 'Window Making: Start')
       
         for category in ImageRanker().category_paths.keys():
             self.categories_menu.append_text(category)
+            follow('category', 'text', 'Window Making: Categories Adding For Loop')
         # Sender Button
+        # From lines 189 to 198 don't make following for not get over information than only slow the program
         self.sender = Gtk.Button(label = 'Categorize')
         # Report View
         self.results = Gtk.Label()
@@ -191,6 +199,8 @@ class app(Gtk.Window):
         # Add containers to window
         for container in [self.image_container, self.form_container, self.results_container]:
             self.big_container.pack_start(container, True, True, 0)
+            follow('container', 'Gtk Widgets Container', 'Window Making: Add Containers For Loop')
+            follow('app().big_container', 'Gtk Widgets Container', 'Window Making: Add Containers For Loop')
           
         self.add(self.big_container)    
 # Show all
