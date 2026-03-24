@@ -9,7 +9,7 @@ img = img()
 dbg = dbg()
 # This procedure need be defined within the module for get access to vars
 def follow(name: str, kind: str, moment: str):
-    dbg.set_var(name, kind, f'eval(name)')
+    dbg.set_var(name, kind, f'{eval(name)}')
     dbg.set_moment(name, moment)
     dbg.get_following(name)
 # Make start following
