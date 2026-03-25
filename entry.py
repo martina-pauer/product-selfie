@@ -28,8 +28,9 @@ class ImageRanker:
         '''
         # Folder Prefix Setting
         self.prefix = './'
-        # Following: 6 lines saved
-        #follow('ImageRanker().prefix', 'text', 'ImageRanker().__init__(): Line 26')
+        # Following: 5 lines saved
+        dbg.set_var('ImageRanker().prefix', 'text', self.prefix)
+        follow('ImageRanker().prefix', 'ImageRanker().__init__(): Line 26')
         # Class Atributes
         import os
         os.system(f'ls {self.prefix} >> temp.txt')
@@ -39,7 +40,7 @@ class ImageRanker:
         follow('ImageRanker().image_paths', 'ImageRanker().__init__(): Line 36')
         with open('temp.txt', 'r') as image:
             line = image.readline().split(' ')
-            dbg.set_var('line', 'text', f'{eval("line")}')
+            dbg.set_var('line', 'text', line)
             follow('line', '"temp.txt" loop: Line 39 to 41')
             # Add Image paths when are the image type
             for content in line:
@@ -102,8 +103,10 @@ class ImageRanker:
           to the folder with image with same category.
         '''
         # Make Following
-        #follow('ImageRanker().image_paths', 'Text List', 'ImageRanker move_files Method')
-        #follow('ImageRanker().category_paths', 'Name To Paths Text Dictionary', 'ImageRanker move_files method')
+        dbg.set_var('ImageRanker().image_paths', 'Text List', f'{eval("self.image_paths")}')
+        dbg.set_var('ImageRanker().category_paths', 'Name To Paths Text Dictionary', f'{eval("self.category_paths")}')
+        follow('ImageRanker().image_paths', 'ImageRanker move_files Method')
+        follow('ImageRanker().category_paths', 'ImageRanker move_files method')
         import os
         # Get images folder path and where move
         for image in self.image_paths:
@@ -199,25 +202,25 @@ class app(Gtk.Window):
         self.set_size_request(480, 480)
         # Containers
         self.big_container = Gtk.VBox()
-        dbg.set_var('self.big_container', 'Gtk Vertical Box Container', f'{eval("self.big_container")}')
+        dbg.set_var('app().big_container', 'Gtk Vertical Box Container', f'{eval("self.big_container")}')
         follow('app().big_container', 'Window Making: Start')
         self.image_container = Gtk.VBox()
-        dbg.set_var('self.image_container', 'Gtk Vertical Box Container', f'{eval("self.image_container")}')
+        dbg.set_var('app().image_container', 'Gtk Vertical Box Container', f'{eval("self.image_container")}')
         follow('app().image_container', 'Window Making: Start')
         self.form_container = Gtk.VBox()
-        dbg.set_var('self.form_container', 'Gtk Vertical Box Container', f'{eval("self.form_container")}')
+        dbg.set_var('app().form_container', 'Gtk Vertical Box Container', f'{eval("self.form_container")}')
         follow('app().form_container', 'Window Making: Start')
         self.results_container = Gtk.VBox()
-        dbg.set_var('self.results_container', 'Gtk Vertical Box Container', f'{eval("self.results_container")}')
+        dbg.set_var('app().results_container', 'Gtk Vertical Box Container', f'{eval("self.results_container")}')
         follow('app().results_container', 'Window Making: Start')
         # Image View
         self.image = Gtk.Image()
-        dbg.set_var('self.image', 'Gtk Image Widget', f'{eval(self.image)}')
+        dbg.set_var('app().image', 'Gtk Image Widget', f'{eval(self.image)}')
         follow('app().image', 'Window Making: Start')
         # Category Selection Menu
         self.categories_menu = Gtk.ComboBoxText()
         self.categories_menu.set_entry_text_column(0)
-        dbg.set_var('self.categories_menu', 'Gtk Options Selections Menu', f'{eval("self.categories_menu")}')
+        dbg.set_var('app().categories_menu', 'Gtk Options Selections Menu', f'{eval("self.categories_menu")}')
         follow('app().categories_menu', 'Window Making: Start')
       
         for category in ImageRanker().category_paths.keys():
