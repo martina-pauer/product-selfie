@@ -38,7 +38,7 @@ class DatagramGenerator:
       file_list = open('file_count_temp.txt', 'r')
       for image in file_list.readlines():
           # Iterates over each line from all and count names with extension with dots
-          if image.__contains__(f'.{ImageClasify().image_type}'):
+          if image.__contains__(f'{ImageClasify().image_type}'):
           # The name is file
             images += 1
       # Close file and Free Out memory      
@@ -52,13 +52,15 @@ class DatagramGenerator:
         os.system(f'mkdir -p {self.get_path(category)}')  
         os.system(f'ls {self.get_path(category)} >> file_count_temp.txt')
         with open('file_count_temp.txt', 'r') as counting:
-            if image.__contains__(f'.{ImageClasify().image_type}'):
+            if image.__contains__(f'{ImageClasify().image_type}'):
               # Count when files are images
               image += 1
         os.system('rm file_count_temp.txt')      
       except:
         pass  
     del os
+    # Save Category and Respective count in poll dictionary
+    self.poll.__setitem__(category, images)
     # Show image count
     return images
 
@@ -93,7 +95,7 @@ class DatagramGenerator:
         # Count the images in each category
         content += '<div style = "text-align: center; padding: 0.5em; border: 2px solid black; border-radius: 0.5em; background: #2535cf; color: #efefef; font-weight: 840;">\n\t\t\t'
         content += f'{category}<span style = "text-align: center; margin: 0.5 padding: 0.5em; border: 2px solid black; background: #efefef; color: black; font-weight: 840;">{self.poll[category]}</span>\n'
-        content += '\t\t</div>\n\t\t'
+        content += '\t\t</div>\n\t'
       # HTML ending  
       content += '</body>\n'
       content += '</html>'
