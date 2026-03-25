@@ -39,7 +39,7 @@ class ImageRanker:
         dbg.set_var('ImageRanker().image_paths', 'Text List', f'{eval("self.image_paths")}')
         follow('ImageRanker().image_paths', 'ImageRanker().__init__(): Line 36')
         with open('temp.txt', 'r') as image:
-            line = image.readline().split(' ')
+            line = image.readlines()
             dbg.set_var('line', 'text', line)
             follow('line', '"temp.txt" loop: Line 39 to 41')
             # Add Image paths when are the image type
