@@ -215,7 +215,7 @@ class app(Gtk.Window):
         follow('app().results_container', 'Window Making: Start')
         # Image View
         self.image = Gtk.Image()
-        dbg.set_var('app().image', 'Gtk Image Widget', f'{eval(self.image)}')
+        dbg.set_var('app().image', 'Gtk Image Widget', f'{eval("self.image")}')
         follow('app().image', 'Window Making: Start')
         # Category Selection Menu
         self.categories_menu = Gtk.ComboBoxText()
