@@ -152,6 +152,8 @@ class ImageRanker:
         result: str = ''
         dbg.set_var('result', 'text', result)
         follow('result', 'ImageRanker: Window Event update_poll_visualizer')
+        # Get selected category from options menu
+        img.set_category(maker.categories_menu.get_active_text())
         # Add each one of the categories and how much images has each one
         self.move_files()
         for category in self.category_paths.keys():
