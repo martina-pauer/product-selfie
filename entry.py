@@ -79,12 +79,12 @@ class ImageRanker:
                 follow('ImageRanker().prefix', 'Line 62 to 67: data/conf.csv Lines Reading')
                 dbg.set_var('ImageRanker().category_paths', 'Name To Paths Text Dictionary', f'{eval("self.category_paths")}')
                 follow('ImageRanker().category_paths', 'Lines 62 to 67: data/conf.csv Line Reading')
-        # Make folder if not exist
-        try:
-            os.system(f'mkdir -p {part[1]}')
-            del part, os
-        except:
-            pass
+                # Make folder if not exist
+                try:
+                    os.system(f'mkdir -p {part[1]}')
+                    del part, os
+                except:
+                    pass
         # Close file to Free Out memmory and could use it in the future
         config.close()
         del config
