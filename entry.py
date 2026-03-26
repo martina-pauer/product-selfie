@@ -30,18 +30,18 @@ class ImageRanker:
         self.prefix = './'
         # Following: 5 lines saved
         dbg.set_var('ImageRanker().prefix', 'text', self.prefix)
-        follow('ImageRanker().prefix', 'ImageRanker().__init__(): Line 26')
+        follow('ImageRanker().prefix', 'ImageRanker().__init__() [Line 26]')
         # Class Atributes
         import os
         os.system(f'ls {self.prefix} >> temp.txt')
         self.image_paths: list[str] = []
         # 8 lines saved: for don't repeat lines save lines multiples of function
         dbg.set_var('ImageRanker().image_paths', 'Text List', f'{eval("self.image_paths")}')
-        follow('ImageRanker().image_paths', 'ImageRanker().__init__(): Line 36')
+        follow('ImageRanker().image_paths', 'ImageRanker().__init__() [Line 36]')
         with open('temp.txt', 'r') as image:
             line = image.readlines()
             dbg.set_var('line', 'text', line)
-            follow('line', '"temp.txt" loop: Line 39 to 41')
+            follow('line', '"temp.txt" loop [Line 39 to 41]')
             # Add Image paths when are the image type
             for content in line:
                 # Foreach file name only add whose has image file extension
@@ -49,23 +49,23 @@ class ImageRanker:
                     image_name: str = content.replace("\n", "").replace("\t", "")
                     self.image_paths.append(f'{self.prefix}{image_name}')
                     dbg.set_var('image_name', 'text', image_name)
-                    follow('image_name', f'Images For Loop "{content}" iteration: lines 43 to 47')
+                    follow('image_name', f'Images For Loop "{content}" iteration [lines 43 to 47]')
                     dbg.set_var('ImageRanker().image_paths', 'Text List', f'{eval("self.image_paths")}')
-                    follow('ImageRanker().image_paths', f'Images For Loop "{content}" iteration: lines 43 to 47')
+                    follow('ImageRanker().image_paths', f'Images For Loop "{content}" iteration [lines 43 to 47]')
                     del image_name
         os.system('rm temp.txt')
         del os
         self.image_index: int = 0
         dbg.set_var('ImageRanker().image_index', 'integer', f'{eval("self.image_index")}')
-        follow('ImageRanker().image_index', 'Line 53: Image Selector Index')
+        follow('ImageRanker().image_index', '[Line 53] Image Selector Index')
         # Key: Category, Value: Category Path
         self.category_paths: dict[str, str] = {}
         dbg.set_var('ImageRanker().category_paths', 'Name To Paths Text Dictionary', f'{eval("self.category_paths")}')
-        follow('ImageRanker().category_paths', 'Line 56: Category Paths Getter')
+        follow('ImageRanker().category_paths', '[Line 56] Category Paths Getter')
         # Get categories from data/conf.csv one time for optimize
         config = open('data/conf.csv', 'r')
         dbg.set_var('config', 'File Handler', f'{eval("config")}')
-        follow('config', 'Line 59: Open data/conf.csv as reading')
+        follow('config', '[Line 59] Open data/conf.csv as reading')
         # Add each category to categories register
         for line in config.readlines():
             if not line.__contains__('Category'):
@@ -74,11 +74,11 @@ class ImageRanker:
                 part[1] = f'{self.prefix}{part[1]}'
                 self.category_paths.__setitem__(part[0], part[1])
                 dbg.set_var('part', 'Text List', f'{eval("part")}')
-                follow('part', 'Line 62 to 67: data/conf.csv Lines Reading')
+                follow('part', '[Line 62 to 67] data/conf.csv Lines Reading')
                 dbg.set_var('ImageRanker().prefix', 'text', self.prefix)
-                follow('ImageRanker().prefix', 'Line 62 to 67: data/conf.csv Lines Reading')
+                follow('ImageRanker().prefix', '[Line 62 to 67] data/conf.csv Lines Reading')
                 dbg.set_var('ImageRanker().category_paths', 'Name To Paths Text Dictionary', f'{eval("self.category_paths")}')
-                follow('ImageRanker().category_paths', 'Lines 62 to 67: data/conf.csv Line Reading')
+                follow('ImageRanker().category_paths', '[Lines 62 to 67] data/conf.csv Line Reading')
                 # Make folder if not exist
                 import os
                 os.system(f'mkdir -p {part[1]}')
@@ -93,7 +93,7 @@ class ImageRanker:
             report.add_category(separate[separate.__len__() - 1], category_path)
             # Make Following Over the Loop Iterations
             dbg.set_var('separate', 'Text List', f'{eval("separate")}')
-            follow('separate', f'Lines 81 to 84: For Loop with category_path Equal To "{category_path}"')
+            follow('separate', f'[Lines 81 to 84] For Loop with category_path Equal To "{category_path}"')
           
     def move_files(self):
         '''
@@ -106,15 +106,11 @@ class ImageRanker:
         follow('ImageRanker().image_paths', 'ImageRanker move_files Method')
         follow('ImageRanker().category_paths', 'ImageRanker move_files method')
         import os
-        # Get images folder path and where move
-        for image in self.image_paths:
-            # Add exception handle for don't give systems errors
-            try:
-                os.system(f'mv {image} {self.category_paths[img.get_category()]}')
-                dbg.set_var('image', 'text', image)
-                follow('image', 'ImageRanker move_files Method')
-            except:
-                pass 
+        # Get image folder path and where move
+        os.system(f'mv {self.image_paths[self.image_index]} {self.category_paths[img.get_category()]}')
+        # Move The current image with changing index to right folder
+        dbg.set_var('ImageRanker().image_index', 'integer', self.image_index)
+        follow('ImageRanker().image_index', 'ImageRanker move_files Method')
         # Free Out memory
         del os
 
@@ -130,13 +126,13 @@ class ImageRanker:
               preserve_aspect_ratio = True
             )
             dbg.set_var('scaled_preview', 'Gdk Pixbuf', f'{eval("scaled_preview")}')
-            follow('scaled_preview', 'ImageRanker: Window Calling')
+            follow('scaled_preview', 'ImageRanker [Window Calling]')
             dbg.set_var('ImageRanker.image_paths', 'Name To Paths Text Dictionary', f'{eval("self.image_paths")}')
-            follow('ImageRanker().image_paths', 'ImageRanker: Window Calling')
+            follow('ImageRanker().image_paths', 'ImageRanker [Window Calling]')
             # Change image scale
             maker.image.set_from_pixbuf(scaled_preview)
             dbg.set_var('maker', 'Gtk.Window extended "app" object', f'{eval("maker")}')
-            follow('maker', 'ImageRanker: Window Calling')
+            follow('maker', 'ImageRanker [Window Calling]')
             maker.show_all()
             Gtk.main()
         except:
@@ -149,7 +145,7 @@ class ImageRanker:
         '''
         result: str = ''
         dbg.set_var('result', 'text', result)
-        follow('result', 'ImageRanker: Window Event update_poll_visualizer')
+        follow('result', 'ImageRanker [Window Event update_poll_visualizer]')
         # Get selected category from options menu
         img.set_category(maker.categories_menu.get_active_text())
         # Add each one of the categories and how much images has each one
@@ -157,11 +153,11 @@ class ImageRanker:
         for category in self.category_paths.keys():
             counter: int = report.count_from_folders(category)
             dbg.set_var('counter', 'integer', f'{counter}')
-            follow('counter', f'ImageRanker: Window Event "{category}" For Loop')
+            follow('counter', f'ImageRanker [Window Event "{category}"] For Loop')
             result = f'\n\nCategory: {category},\tImages: {counter}' 
             del counter
             dbg.set_var('result', 'text', result)
-            follow('result', f'ImageRanker: Window Event "{category}" For Loop')
+            follow('result', f'ImageRanker [Window Event "{category}"] For Loop')
             # Show the result
         self.refresh_interface(result)
         # Make the report
@@ -176,11 +172,11 @@ class ImageRanker:
             # When has the image max restar image index
             self.image_index += 1
             dbg.set_var('ImageRanker().image_index', 'integer', f'{self.image_index}')
-            follow('ImageRanker().image_index', 'ImageRanker: Refresh Graphics')
+            follow('ImageRanker().image_index', 'ImageRanker [Refresh Graphics]')
         else:
             self.image_index = 0
             dbg.set_var('ImageRanker().image_index', 'integer', f'{self.image_index}')
-            follow('ImageRanker().image_index', 'ImageRanker: Refresh Graphics')
+            follow('ImageRanker().image_index', 'ImageRanker [Refresh Graphics]')
         # Create Scaled Image From The Original
         scaled_preview_second = GdkPixbuf.Pixbuf.new_from_file_at_scale(
             filename = self.image_paths[self.image_index],
@@ -188,12 +184,12 @@ class ImageRanker:
             preserve_aspect_ratio = True
         )
         dbg.set_var('scaled_preview_second', 'Gdk Pixbuf', f'{eval("scaled_preview_second")}')
-        follow('scaled_preview_second', 'ImageRanker: Refresh Graphics')
+        follow('scaled_preview_second', 'ImageRanker [Refresh Graphics]')
         # Change image scale
         maker.image.set_from_pixbuf(scaled_preview_second)
         maker.results.set_text(last_results)
         dbg.set_var('maker', 'Gtk.Window extended "app" object', f'{eval("maker")}')
-        follow('maker', 'ImageRanker: Refresh Graphics')
+        follow('maker', 'ImageRanker [Refresh Graphics]')
 # Make Gtk Window
 class app(Gtk.Window):
     def __init__(self):
@@ -203,30 +199,30 @@ class app(Gtk.Window):
         # Containers
         self.big_container = Gtk.VBox()
         dbg.set_var('app().big_container', 'Gtk Vertical Box Container', f'{eval("self.big_container")}')
-        follow('app().big_container', 'Window Making: Start')
+        follow('app().big_container', 'Window Making [Start]')
         self.image_container = Gtk.VBox()
         dbg.set_var('app().image_container', 'Gtk Vertical Box Container', f'{eval("self.image_container")}')
-        follow('app().image_container', 'Window Making: Start')
+        follow('app().image_container', 'Window Making [Start]')
         self.form_container = Gtk.VBox()
         dbg.set_var('app().form_container', 'Gtk Vertical Box Container', f'{eval("self.form_container")}')
-        follow('app().form_container', 'Window Making: Start')
+        follow('app().form_container', 'Window Making [Start]')
         self.results_container = Gtk.VBox()
         dbg.set_var('app().results_container', 'Gtk Vertical Box Container', f'{eval("self.results_container")}')
-        follow('app().results_container', 'Window Making: Start')
+        follow('app().results_container', 'Window Making [Start]')
         # Image View
         self.image = Gtk.Image()
         dbg.set_var('app().image', 'Gtk Image Widget', f'{eval("self.image")}')
-        follow('app().image', 'Window Making: Start')
+        follow('app().image', 'Window Making [Start]')
         # Category Selection Menu
         self.categories_menu = Gtk.ComboBoxText()
         self.categories_menu.set_entry_text_column(0)
         dbg.set_var('app().categories_menu', 'Gtk Options Selections Menu', f'{eval("self.categories_menu")}')
-        follow('app().categories_menu', 'Window Making: Start')
+        follow('app().categories_menu', 'Window Making [Start]')
       
         for category in ImageRanker().category_paths.keys():
             self.categories_menu.append_text(category)
             dbg.set_var('category', 'text', f'{eval("category")}')
-            follow('category', 'Window Making: Categories Adding For Loop')
+            follow('category', 'Window Making [Categories Adding] For Loop')
         # Sender Button
         # From lines 189 to 198 don't make following for not get over information than only slow the program
         self.sender = Gtk.Button(label = 'Categorize')
@@ -244,8 +240,8 @@ class app(Gtk.Window):
             self.big_container.pack_start(container, True, True, 0)
             dbg.set_var('container', 'Gtk Widgets Container', f'{eval("container")}')
             dbg.set_var("app().big_container", 'Gtk Widgets Container', f'{eval("self.big_container")}')
-            follow('container', 'Window Making: Add Containers For Loop')
-            follow('app().big_container', 'Window Making: Add Containers For Loop')
+            follow('container', 'Window Making [Add Containers] For Loop')
+            follow('app().big_container', 'Window Making [Add Containers] For Loop')
           
         self.add(self.big_container)    
 # Show all
