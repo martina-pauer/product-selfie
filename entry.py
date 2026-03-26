@@ -80,6 +80,7 @@ class ImageRanker:
                 dbg.set_var('ImageRanker().category_paths', 'Name To Paths Text Dictionary', f'{eval("self.category_paths")}')
                 follow('ImageRanker().category_paths', 'Lines 62 to 67: data/conf.csv Line Reading')
                 # Make folder if not exist
+                import os
                 os.system(f'mkdir -p {part[1]}')
                 del part, os
         # Close file to Free Out memmory and could use it in the future
@@ -171,7 +172,7 @@ class ImageRanker:
           Auxiliar internal method for load
           next image and show last results
         '''
-        if (self.image_index + 1) < (self.image_paths.__len__() - 1):
+        if self.image_index < (self.image_paths.__len__() - 1):
             # When has the image max restar image index
             self.image_index += 1
             dbg.set_var('ImageRanker().image_index', 'integer', f'{self.image_index}')
