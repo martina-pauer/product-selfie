@@ -80,11 +80,8 @@ class ImageRanker:
                 dbg.set_var('ImageRanker().category_paths', 'Name To Paths Text Dictionary', f'{eval("self.category_paths")}')
                 follow('ImageRanker().category_paths', 'Lines 62 to 67: data/conf.csv Line Reading')
                 # Make folder if not exist
-                try:
-                    os.system(f'mkdir -p {part[1]}')
-                    del part, os
-                except:
-                    pass
+                os.system(f'mkdir -p {part[1]}')
+                del part, os
         # Close file to Free Out memmory and could use it in the future
         config.close()
         del config
@@ -110,9 +107,9 @@ class ImageRanker:
         import os
         # Get images folder path and where move
         for image in self.image_paths:
-         # Add exception handle for don't give systems errors
+            # Add exception handle for don't give systems errors
             try:
-                os.system(f'mv {image} {self.category_paths[image]}')
+                os.system(f'mv {image} {self.category_paths[img.get_category()]}')
                 dbg.set_var('image', 'text', image)
                 follow('image', 'ImageRanker move_files Method')
             except:
