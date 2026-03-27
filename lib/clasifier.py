@@ -54,7 +54,7 @@ class DatagramGenerator:
         with open('file_count_temp.txt', 'r') as counting:
             if image.__contains__(f'{ImageClasify().image_type}'):
               # Count when files are images
-              image += 1
+              images += 1
         os.system('rm file_count_temp.txt')      
       except:
         pass  
