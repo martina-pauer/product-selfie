@@ -160,9 +160,7 @@ class ImageRanker:
             follow('result', f'ImageRanker [Window Event "{category}"] For Loop')
             # Show the result
         self.refresh_interface(result)
-        # Make the report
-        report.write_file('data/report.html')
-    
+            
     def refresh_interface(self, last_results: str):
         '''
           Auxiliar internal method for load
@@ -253,4 +251,6 @@ follow('maker', 'main program')
 program = ImageRanker()
 dbg.set_var('program', 'ImageRanker object', f'{eval("program")}')
 follow('program', 'main program')
-program.show_graphical_interface() 
+program.show_graphical_interface()
+# Make the report
+report.write_file('data/report.html') 
