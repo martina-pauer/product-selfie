@@ -52,7 +52,7 @@ class DatagramGenerator:
         os.system(f'mkdir -p {self.get_path(category)}')  
         os.system(f'ls {self.get_path(category)} >> file_count_temp.txt')
         with open('file_count_temp.txt', 'r') as counting:
-            if image.__contains__(f'{ImageClasify().image_type}'):
+            if counting.readline().__contains__(f'{ImageClasify().image_type}'):
               # Count when files are images
               images += 1
         os.system('rm file_count_temp.txt')      
